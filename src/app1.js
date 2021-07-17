@@ -35,9 +35,9 @@ const v = {
   },
   init(el) {
     v.el = $(el)
-    v.render()
+    // v.render()
   },
-  render() {
+  render(n) {
     // 元素渲染到页面
     if (v.el.children.length === 0) {
       // 初始化元素
@@ -46,13 +46,14 @@ const v = {
       v.el.empty()//删掉之前的东西，再appendTo
       // $(v.html.replace('{{n}}', m.data.n)).appendTo(v.el)
     }
-    $(v.html.replace('{{n}}', m.data.n)).appendTo(v.el)
+    $(v.html.replace('{{n}}', n)).appendTo(v.el)
   }
 }
 // 其他放到c
 const c = {
   init(el) {
     v.init(el)
+    v.render(m.data.n)//第一次 view=reader(data)
     c.bindEvents()
   },
   bindEvents() {
@@ -60,22 +61,22 @@ const c = {
     v.el.on('click', '#btnAdd', () => {
       m.data.n += 1
       localStorage.setItem('n', m.data.n)
-      v.render()
+      v.render(m.data.n)//第二次 view=reader(data)
     })
     v.el.on('click', '#btnMinus', () => {
       m.data.n -= 1
       localStorage.setItem('n', m.data.n)
-      v.render()
+      v.render(m.data.n)//第三次 view=reader(data)
     })
     v.el.on('click', '#btnMul', () => {
       m.data.n *= 2
       localStorage.setItem('n', m.data.n)
-      v.render()
+      v.render(m.data.n)//第四次 view=reader(data)
     })
     v.el.on('click', '#btnDivide', () => {
       m.data.n /= 2
       localStorage.setItem('n', m.data.n)
-      v.render()
+      v.render(m.data.n)//第五次 view=reader(data)
     })
   }
 }
