@@ -54,30 +54,46 @@ const c = {
   init(el) {
     v.init(el)
     v.render(m.data.n)//第一次 view=reader(data)
-    c.bindEvents()
+    c.autoBindEvents()
   },
-  bindEvents() {
-    // 事件委托，不绑定在子元素上，绑定在父元素上
-    v.el.on('click', '#btnAdd', () => {
-      m.data.n += 1
-      localStorage.setItem('n', m.data.n)
-      v.render(m.data.n)//第二次 view=reader(data)
-    })
-    v.el.on('click', '#btnMinus', () => {
-      m.data.n -= 1
-      localStorage.setItem('n', m.data.n)
-      v.render(m.data.n)//第三次 view=reader(data)
-    })
-    v.el.on('click', '#btnMul', () => {
-      m.data.n *= 2
-      localStorage.setItem('n', m.data.n)
-      v.render(m.data.n)//第四次 view=reader(data)
-    })
-    v.el.on('click', '#btnDivide', () => {
-      m.data.n /= 2
-      localStorage.setItem('n', m.data.n)
-      v.render(m.data.n)//第五次 view=reader(data)
-    })
+  events: {
+    'click #btnAdd': 'add',
+    'click #btnMinus': 'minus',
+    'click #btnMul': 'mul',
+    'click #btnDivide': 'divide'
+  },
+  add() {
+    m.data.n += 1
+    localStorage.setItem('n', m.data.n)
+    v.render(m.data.n)
+  },
+  minus() {
+    m.data.n -= 1
+    localStorage.setItem('n', m.data.n)
+    v.render(m.data.n)
+  },
+  mul() {
+    m.data.n *= 2
+    localStorage.setItem('n', m.data.n)
+    v.render(m.data.n)
+  },
+  divide() {
+    m.data.n /= 2
+    localStorage.setItem('n', m.data.n)
+    v.render(m.data.n)
+
+  },
+  autoBindEvents() {
+    for (let key in c.events) {
+      const value = c[c.events[key]]
+      const spaceIndex = key.indexOf(' ')
+      console.log(spaceIndex);
+      const part1 = key.slice(0, spaceIndex)
+      const part2 = key.slice(spaceIndex + 1)
+      console.log(part1 + "," + part2, ",", value);
+      v.el.on(part1, part2, value)
+      // console.log(key);
+    }
   }
 }
 
