@@ -13,7 +13,7 @@ const m = {
 // 视图相关的放到v
 const v = {
   el: null,
-  container: null,
+  // container: null,
   // 初始化html
   html: `
 <div>
@@ -33,45 +33,46 @@ const v = {
     // 将数据渲染到页面,更新数字
     c.ui.number.text(m.data.n || 100)
   },
-  init(container) {
-    v.container = $(container)
+  init(el) {
+    v.el = $(el)
     v.render()
   },
   render() {
     // 元素渲染到页面
-    if (v.el === null) {
-      v.el = $(v.html.replace('{{n}}', m.data.n)).appendTo(v.container)
+    if (v.el.children.length === 0) {
+      // 初始化元素
+      // $(v.html.replace('{{n}}', m.data.n)).appendTo(v.el)
     } else {
-      const newEl = $(v.html.replace('{{n}}', m.data.n))
-      v.el.replaceWith(newEl)
-      v.el = newEl
+      v.el.empty()//删掉之前的东西，再appendTo
+      // $(v.html.replace('{{n}}', m.data.n)).appendTo(v.el)
     }
+    $(v.html.replace('{{n}}', m.data.n)).appendTo(v.el)
   }
 }
 // 其他放到c
 const c = {
-  init(container) {
-    v.init(container)
+  init(el) {
+    v.init(el)
     c.bindEvents()
   },
   bindEvents() {
     // 事件委托，不绑定在子元素上，绑定在父元素上
-    v.container.on('click', '#btnAdd', () => {
+    v.el.on('click', '#btnAdd', () => {
       m.data.n += 1
       localStorage.setItem('n', m.data.n)
       v.render()
     })
-    v.container.on('click', '#btnMinus', () => {
+    v.el.on('click', '#btnMinus', () => {
       m.data.n -= 1
       localStorage.setItem('n', m.data.n)
       v.render()
     })
-    v.container.on('click', '#btnMul', () => {
+    v.el.on('click', '#btnMul', () => {
       m.data.n *= 2
       localStorage.setItem('n', m.data.n)
       v.render()
     })
-    v.container.on('click', '#btnDivide', () => {
+    v.el.on('click', '#btnDivide', () => {
       m.data.n /= 2
       localStorage.setItem('n', m.data.n)
       v.render()
